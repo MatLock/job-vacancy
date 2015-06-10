@@ -18,7 +18,7 @@ PadrinoTasks.init
 
 if ['development', 'test', 'travis'].include?(PADRINO_ENV)
 
-	task :all do
+  task :all do
   ["rake spec", "rake cucumber"].each do |cmd|
     puts "Starting to run #{cmd}..."
     system("export DISPLAY=:99.0 && bundle exec #{cmd}")
@@ -35,11 +35,11 @@ if ['development', 'test', 'travis'].include?(PADRINO_ENV)
   end
 
   require 'cucumber/rake/task'
-	Cucumber::Rake::Task.new(:cucumber) do |task|
-  	Rake::Task['db:migrate'].invoke
-  	Rake::Task['db:seed'].invoke
-  	task.cucumber_opts = ["features"]
-	end
+  Cucumber::Rake::Task.new(:cucumber) do |task|
+    Rake::Task['db:migrate'].invoke
+    Rake::Task['db:seed'].invoke
+    task.cucumber_opts = ["features","--tags ~@wip"]
+  end
 
   Cucumber::Rake::Task.new(:cucumber_report) do |task|
     Rake::Task['db:migrate'].invoke
@@ -49,7 +49,6 @@ if ['development', 'test', 'travis'].include?(PADRINO_ENV)
   require 'rspec/core/rake_task'
   RSpec::Core::RakeTask.new(:spec) do |t|
     t.pattern = "./spec/**/*_spec.rb"
-    t.rspec_opts = %w(-fs --color)
   end
 
   require 'rspec/core/rake_task'
@@ -57,7 +56,8 @@ if ['development', 'test', 'travis'].include?(PADRINO_ENV)
     t.pattern = "./spec/**/*_spec.rb"
     t.rspec_opts = %w(--format RspecJunitFormatter --out reports/spec/spec.xml)
   end
-  
+
+=begin  
   require 'rubocop/rake_task'
   desc 'Run RuboCop on the lib directory'
   Rubocop::RakeTask.new(:rubocop) do |task|
@@ -65,7 +65,8 @@ if ['development', 'test', 'travis'].include?(PADRINO_ENV)
     # don't abort rake on failure
     task.fail_on_error = false
   end
+=end
 
-	task :default => [:all]
+  task :default => [:all]
 
 end

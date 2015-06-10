@@ -1,8 +1,12 @@
-	<%= f.label :title %>
- 	<%= f.text_field :title, :class => "input-block-level" %>
+  <%= f.label :title %>
+	<%= f.text_field :title, :class => "input-block-level" %>
   <%= f.label :location %>
   <%= f.text_field :location, :class => "input-block-level" %>
   <%= f.label :description %>
   <%= f.text_area :description, :class => "input-block-level" %>
+  <%= f.label :expired_date %>
+  <%= f.text_field :expired_date, :class => "form-control", :placeholder => "YYYY-mm-dd" %>
+  
+
 
   <br/>
