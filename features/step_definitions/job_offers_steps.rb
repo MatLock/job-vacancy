@@ -71,3 +71,23 @@ end
 Given(/^I save the modification$/) do
   click_button('Save')
 end
+
+
+Given(/^an offer with the title "(.*?)" created by me$/) do |title|
+  JobOffer.all.destroy
+  visit '/job_offers/new'
+  fill_in('job_offer[title]', :with => title)
+  click_button('Create')
+end
+
+Given(/^I access the job offers page$/) do
+  visit '/job_offers/latest'
+end
+
+Then(/^I shouldn't see the "(.*?)" button on offers I created$/) do |arg1|
+  page.has_no_button?('Apply')
+end
+
+Then(/^I should see the "(.*?)" button on offers I created$/) do |arg1|
+  page.has_button?('Apply')
+end

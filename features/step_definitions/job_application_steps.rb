@@ -1,4 +1,5 @@
 Given(/^only a "(.*?)" offer exists in the offers list$/) do | job_title |
+  JobOffer.all.destroy
   @job_offer = JobOffer.new
   @job_offer.owner = User.first
   @job_offer.title = job_title
@@ -13,10 +14,17 @@ Given(/^I access the offers list page$/) do
 end
 
 When(/^I apply$/) do
-  click_link 'Apply'
-  fill_in('job_application[applicant_email]', :with => 'applicant@test.com')
+  click_link('Apply')
+  fill_in('job_offer_applicant[applicant_email]', :with => 'applicant@test.com')
+  fill_in('job_offer_applicant[name]', :with => 'Santiago')
+  fill_in('job_offer_applicant[last_name]', :with => 'Ladavaz')
   click_button('Apply')
 end
+
+When(/^I apply to an offer$/) do
+  click_link('Apply', match: :first)
+end
+
 
 Then(/^I should receive a mail with offerer info$/) do
   mail_store = "#{Padrino.root}/tmp/emails"
@@ -27,4 +35,24 @@ Then(/^I should receive a mail with offerer info$/) do
   content.include?(@job_offer.description).should be true
   content.include?(@job_offer.owner.email).should be true
   content.include?(@job_offer.owner.name).should be true
+end
+
+Then(/^I should see "(.*?)" field$/) do |field|
+  page.should have_content(field)
+end
+
+
+Given(/^I don't fill mandatory field$/) do
+  fill_in('job_offer_applicant[link_to_cv]', :with => 'dropbox.com')
+  fill_in('job_offer_applicant[applicant_email]', :with => '')
+  fill_in('job_offer_applicant[name]', :with => '')
+  fill_in('job_offer_applicant[last_name]', :with => '')
+end
+
+Given(/^I confirm$/) do
+  click_button('Apply')
+end
+
+Then(/^I should see error message$/) do
+  page.should have_content('Complete mandatory fields')
 end
