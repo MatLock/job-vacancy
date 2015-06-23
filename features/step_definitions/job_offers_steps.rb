@@ -3,6 +3,7 @@ When(/^I browse the default page$/) do
 end
 
 Given(/^I am logged in as job offerer$/) do
+  JobOffer.all.destroy
   visit '/login'
   fill_in('user[email]', :with => 'offerer@test.com')
   fill_in('user[password]', :with => 'Passw0rd!')
@@ -11,12 +12,18 @@ Given(/^I am logged in as job offerer$/) do
 end
 
 Given(/^I access the new offer page$/) do
+  JobOffer.all.destroy
   visit '/job_offers/new'
   page.should have_content('Title')
+  page.should have_content('Salary')
 end
 
 When(/^I fill the title with "(.*?)"$/) do |offer_title|
   fill_in('job_offer[title]', :with => offer_title)
+end
+
+When(/^I check salary expectations$/) do
+  check('job_offer[salary_expectation]')
 end
 
 When(/^confirm the new offer$/) do
@@ -27,25 +34,16 @@ When(/^I fill the expired date with "(.*?)"$/) do |date|
   fill_in('job_offer[expired_date]', :with => (Date.parse date))
 end
 
-Then(/^I should see (\d+) days plus actual day in expired date in My Offers$/) do |arg1|
-  visit '/job_offers/my'
-  page.should have_content(Date.today + arg1.to_i)
+
+When(/^an applicant apply$/) do
+  visit '/'
+  click_link('Logout')
+  visit '/job_offers/latest'
+  click_link('Apply')
 end
 
-Then(/^I should see "(.*?)" in expired date in My Offers$/) do |date|
-  visit '/job_offers/my'
-  page.should have_content(Date.parse date)
-end
-
-Then(/^I should see "(.*?)" in My Offers$/) do |content|
-	visit '/job_offers/my'
-  page.should have_content(content)
-end
-
-
-Then(/^I should not see "(.*?)" in My Offers$/) do |content|
-  visit '/job_offers/my'
-  page.should_not have_content(content)
+When(/^I not check salary expectations$/) do
+  uncheck('job_offer[salary_expectation]')
 end
 
 Given(/^I have "(.*?)" offer in My Offers$/) do |offer_title|
@@ -90,4 +88,25 @@ end
 
 Then(/^I should see the "(.*?)" button on offers I created$/) do |arg1|
   page.has_button?('Apply')
+end
+
+Then(/^I should see (\d+) days plus actual day in expired date in My Offers$/) do |arg1|
+  visit '/job_offers/my'
+  page.should have_content(Date.today + arg1.to_i)
+end
+
+Then(/^I should see "(.*?)" in expired date in My Offers$/) do |date|
+  visit '/job_offers/my'
+  page.should have_content(Date.parse date)
+end
+
+Then(/^I should see "(.*?)" in My Offers$/) do |content|
+  visit '/job_offers/my'
+  page.should have_content(content)
+end
+
+
+Then(/^I should not see "(.*?)" in My Offers$/) do |content|
+  visit '/job_offers/my'
+  page.should_not have_content(content)
 end
