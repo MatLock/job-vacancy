@@ -1,5 +1,5 @@
-
- Feature:  publish expired offers
+Feature:  publish expired offers
+ 
  
  Scenario: publish a selected expired offer
   Given an expired job named "expiredOffer" 
@@ -7,7 +7,7 @@
   When accept the action
   Then "expiredOffer" is updated
 
-
+ 
  Scenario: publish an expired jobs with an incorrect date
   Given an expired job named "expiredOffer"
   And an invalid date

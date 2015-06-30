@@ -13,9 +13,14 @@ class JobOffer
   property :is_active, Boolean, :default => true
   property :salary_expectation, Boolean
   property :expired_date, Date
+  property :visit_count, Integer, :default => 0
   belongs_to :user
 
   validates_presence_of :title
+
+  def addVisit
+    self.visit_count = visit_count + 1
+  end
 
   def owner
     user

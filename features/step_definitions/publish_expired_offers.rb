@@ -14,7 +14,7 @@ Given(/^an expired job named "(.*?)"$/) do |expiredJob|
 end
 
 Given(/^a post date$/) do
-  fill_in('job_offer_expired_date', :with => '30/10/2020')
+  fill_in('expired_date', :with => '30/10/2020')
 end
 
 When(/^accept the action$/) do
@@ -27,7 +27,7 @@ Then(/^"(.*?)" is updated$/) do |expiredOffer|
 end
 
 Given(/^an invalid date$/) do
- fill_in('job_offer_expired_date', :with => '30/10/2005')
+ fill_in('expired_date', :with => '30/10/2005')
 end
 
 Then(/^an error of "(.*?)" it's shown$/) do |error|
