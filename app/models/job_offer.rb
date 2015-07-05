@@ -60,6 +60,8 @@ class JobOffer
   end
 
   def refreshDate(date)
+    puts date
+    puts Date.today
     if (date < Date.today)
       raise InvalidDateException
     end
