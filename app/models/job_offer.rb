@@ -60,9 +60,8 @@ class JobOffer
   end
 
   def refreshDate(date)
-    puts date
-    puts Date.today
-    if (date < Date.today)
+   today = Date.parse('6-07-2015')
+    if (date < today)
       raise InvalidDateException
     end
     self.is_active = true
